@@ -97,9 +97,9 @@ ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
 RUN corepack enable && corepack prepare pnpm@10.4.1 --activate
 
-# Install only production deps to keep image smaller.
+# Install all deps (including devDependencies) because the server bundle uses --packages=external.
 COPY --from=unzipper /src/app/package.json ./
-RUN pnpm install --prod --no-frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copy built artifacts + config files needed at runtime.
 COPY --from=build /app/dist ./dist
